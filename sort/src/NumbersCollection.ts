@@ -1,7 +1,9 @@
-import { Sortable } from "./interfaces";
+import { Sorter } from "./sorter";
 
-export class NumbersCollection implements Sortable {
-  constructor(public data: number[]) {}
+export class NumbersCollection extends Sorter {
+  constructor(public data: number[]) {
+    super();
+  }
 
   compare(leftIndex: number, rightIndex?: number): boolean {
     if (!rightIndex) {

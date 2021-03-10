@@ -1,7 +1,9 @@
-import { Sortable } from "./interfaces";
+import { Sorter } from "./sorter";
 
-export class CharactersCollection implements Sortable {
-  constructor(public data: string) {}
+export class CharactersCollection extends Sorter {
+  constructor(public data: string) {
+    super();
+  }
 
   swap(leftIndex: number, rightIndex: number): void {
     const characters = this.data.split("");
@@ -10,6 +12,7 @@ export class CharactersCollection implements Sortable {
     characters[rightIndex] = swap;
     this.data = characters.join("");
   }
+
   get length(): number {
     return this.data.length;
   }
