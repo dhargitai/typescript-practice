@@ -8,3 +8,13 @@ export enum MatchResult {
   AwayWin = "A",
   Draw = "D",
 }
+
+export type MatchData = [
+  dateString: Date,
+  homeTeam: string,
+  awayTeam: string,
+  homeScore: number,
+  awayScore: number,
+  match: MatchResult,
+  x: string
+];
