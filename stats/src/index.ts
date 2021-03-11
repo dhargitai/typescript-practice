@@ -1,24 +1,26 @@
+import { AverageAnalyzer } from "./AverageAnalyzer";
+import { ConsoleReport } from "./ConsoleReport";
 import { CsvFileReader } from "./CsvFileReader";
 import { MatchReader } from "./MatchReader";
-import { MatchResult } from "./utils";
+import { Summary } from "./Summary";
+import { WinsAnalyzer } from "./WinsAnalyzer";
 
 const csvReader = new CsvFileReader("assets/football.csv");
 const matchReader = new MatchReader(csvReader);
 matchReader.load();
 
-console.log(matchReader.matches);
+const summary = new Summary(new WinsAnalyzer(), new ConsoleReport());
 
-let teamWins = 0;
-const team = "Liverpool";
-const wonAtHome = (match, team) =>
-  match[1] === team && match[5] === MatchResult.HomeWin;
-const wonAtAway = (match, team) =>
-  match[2] === team && match[5] === MatchResult.AwayWin;
+// summary.buildAndPrintReport(matchReader.matches);
 
-for (let match of matchReader.matches) {
-  if (wonAtHome(match, team) || wonAtAway(match, team)) {
-    teamWins++;
-  }
-}
+const liverpoolSummary = new Summary(
+  new WinsAnalyzer("Liverpool"),
+  new ConsoleReport()
+);
+liverpoolSummary.buildAndPrintReport(matchReader.matches);
 
-console.log(team, "won", teamWins, "times");
+const liverpoolAvergageGoalSummary = new Summary(
+  new AverageAnalyzer("Liverpool"),
+  new ConsoleReport()
+);
+liverpoolAvergageGoalSummary.buildAndPrintReport(matchReader.matches);
