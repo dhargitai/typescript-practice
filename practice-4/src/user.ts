@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
 import { Attributes } from "./attributes";
+import { Sync } from "./sync";
 
 type Callback = () => void;
 
@@ -12,36 +12,27 @@ type UserProps = {
 export class User {
   events: { [key: string]: Callback[] } = {};
   attributes: Attributes<UserProps>;
+  sync: Sync<UserProps> = new Sync<UserProps>("http://localhost:3000/users");
 
   constructor(attributes: UserProps) {
     this.attributes = new Attributes<UserProps>(attributes);
   }
 
-  save(): void {
-    if (typeof this.attributes.get("id") === "number") {
-      axios
-        .put(
-          `http://localhost:3000/users/${this.attributes.get("id")}`,
-          this.attributes
-        )
-        .then(() => this.dispatch("save"));
-    } else {
-      axios
-        .post("http://localhost:3000/users", this.attributes)
-        .then(() => this.dispatch("save"));
-    }
+  async save(): Promise<void> {
+    await this.sync.save(this.attributes.getAll());
+    this.dispatch("save");
   }
 
-  async fetch(): Promise<AxiosResponse | void> {
-    if (typeof this.attributes.get("id") !== "number") {
+  async fetch(): Promise<void> {
+    const id = this.attributes.get("id");
+
+    if (typeof id !== "number") {
       throw new Error("Missing id");
     }
 
-    const response = await axios.get(
-      `http://localhost:3000/users/${this.attributes.get("id")}`
-    );
-    this.attributes = new Attributes<UserProps>(response.data);
+    const data = await this.sync.fetch(id);
     this.dispatch("fetch");
+    this.set(data);
   }
 
   subscribe(event: string, callback: Callback): void {
@@ -56,8 +47,8 @@ export class User {
     this.events[event].forEach((callback) => callback());
   }
 
-  set<K extends keyof UserProps>(key: K, value: UserProps[K]) {
-    this.attributes.set(key, value);
-    this.dispatch("edit");
+  set(updatedProps: UserProps) {
+    this.attributes.set(updatedProps);
+    this.dispatch("change");
   }
 }

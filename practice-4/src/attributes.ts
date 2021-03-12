@@ -9,11 +9,14 @@ export class Attributes<T> {
     return this.data[key];
   }
 
-  set<K extends keyof T>(key: K, value: T[K]): void {
-    this.data[key] = value;
-  }
-
   getAll(): T {
     return this.data;
+  }
+
+  set(newData: T): void {
+    this.data = {
+      ...this.data,
+      ...newData,
+    };
   }
 }
