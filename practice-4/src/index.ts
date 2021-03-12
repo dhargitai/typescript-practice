@@ -17,11 +17,11 @@ sutyi.fetch().then(() => {
 });
 
 sutyi.subscribe("fetch", () => {
-  console.log("sutyika fetched!", JSON.stringify(sutyi.data, null, 2));
+  console.log("sutyika fetched!", JSON.stringify(sutyi.attributes, null, 2));
 });
 sutyi.subscribe("edit", () => {
-  console.log("sutyika edited!", JSON.stringify(sutyi.data, null, 2));
+  console.log("sutyika edited!", JSON.stringify(sutyi.attributes, null, 2));
 });
 sutyi.subscribe("save", () => {
-  console.log("sutyika saved!", JSON.stringify(sutyi.data, null, 2));
+  console.log("sutyika saved!", JSON.stringify(sutyi.attributes, null, 2));
 });

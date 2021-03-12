@@ -1,28 +1,13 @@
 import axios, { AxiosResponse } from "axios";
+import { Attributes } from "./attributes";
 
 type Callback = () => void;
 
-// type UserProps = {
-//   [key: string]: string | number | boolean;
-// };
 type UserProps = {
   id?: number;
   name?: string;
   age?: number;
 };
-
-class Attributes<T> {
-  constructor(public data: T) {}
-
-  get<K extends keyof T>(key: K): T[K] {
-    return this.data[key];
-  }
-
-  set<K extends keyof T>(key: K, value: T[K]): void {
-    this.data[key] = value;
-    // this.dispatch("edit");
-  }
-}
 
 export class User {
   events: { [key: string]: Callback[] } = {};
@@ -55,7 +40,7 @@ export class User {
     const response = await axios.get(
       `http://localhost:3000/users/${this.attributes.get("id")}`
     );
-    this.attributes = { ...this.attributes, ...response.data };
+    this.attributes = new Attributes<UserProps>(response.data);
     this.dispatch("fetch");
   }
 
@@ -69,5 +54,10 @@ export class User {
       return;
     }
     this.events[event].forEach((callback) => callback());
+  }
+
+  set<K extends keyof UserProps>(key: K, value: UserProps[K]) {
+    this.attributes.set(key, value);
+    this.dispatch("edit");
   }
 }

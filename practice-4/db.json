@@ -6,9 +6,16 @@
       "id": 1
     },
     {
-      "id": 2,
-      "age": 55,
-      "name": "Sutyi"
+      "data": {
+        "data": {
+          "id": 2,
+          "age": 33,
+          "name": "Sutyi"
+        },
+        "id": 2,
+        "age": 33
+      },
+      "id": 2
     }
   ]
 }
