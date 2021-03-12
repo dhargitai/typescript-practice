@@ -1,13 +1,10 @@
 import axios from "axios";
-
-export interface HasId {
-  id?: number;
-}
+import { HasId } from "./interfaces";
 
 export class Sync<T extends HasId> {
   constructor(public rootUrl: string) {}
 
-  save(data: T): Promise<T> {
+  save(data: T): Promise<void> {
     if (typeof data.id === "number") {
       return axios.put(`${this.rootUrl}/${data.id}`, data);
     } else {
