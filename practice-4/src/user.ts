@@ -1,7 +1,6 @@
 import { Attributes } from "./attributes";
+import { Eventing } from "./eventing";
 import { Sync } from "./sync";
-
-type Callback = () => void;
 
 type UserProps = {
   id?: number;
@@ -10,9 +9,9 @@ type UserProps = {
 };
 
 export class User {
-  events: { [key: string]: Callback[] } = {};
   attributes: Attributes<UserProps>;
   sync: Sync<UserProps> = new Sync<UserProps>("http://localhost:3000/users");
+  eventing: Eventing = new Eventing();
 
   constructor(attributes: UserProps) {
     this.attributes = new Attributes<UserProps>(attributes);
@@ -35,20 +34,20 @@ export class User {
     this.set(data);
   }
 
-  subscribe(event: string, callback: Callback): void {
-    this.events[event] = this.events[event] || [];
-    this.events[event].push(callback);
+  get subscribe() {
+    return this.eventing.subscribe;
   }
 
-  dispatch(event: string): void {
-    if (!Array.isArray(this.events[event])) {
-      return;
-    }
-    this.events[event].forEach((callback) => callback());
+  get dispatch() {
+    return this.eventing.dispatch;
   }
 
   set(updatedProps: UserProps) {
     this.attributes.set(updatedProps);
     this.dispatch("change");
+  }
+
+  get get() {
+    return this.attributes.get;
   }
 }

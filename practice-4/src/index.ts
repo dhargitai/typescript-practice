@@ -10,7 +10,7 @@ import { User } from "./user";
 
 const sutyi = new User({ id: 2 });
 sutyi.fetch().then(() => {
-  sutyi.set({ age: 43 });
+  sutyi.set({ age: 11 });
   sutyi.save();
 
   console.log(sutyi);
