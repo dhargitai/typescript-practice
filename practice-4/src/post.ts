@@ -1,7 +1,7 @@
 import { Attributes } from "./attributes";
 import { Eventing } from "./eventing";
 import { Model } from "./model";
-import { Sync } from "./sync";
+import { ApiSync } from "./api-sync";
 
 type PostProps = {
   id?: number;
@@ -10,10 +10,10 @@ type PostProps = {
 };
 
 export class Post extends Model<PostProps> {
-  constructor(attributes: PostProps) {
-    super(
+  static build(attributes: PostProps) {
+    return new Post(
       new Attributes<PostProps>(attributes),
-      new Sync<PostProps>("http://localhost:3000/posts"),
+      new ApiSync<PostProps>("http://localhost:3000/posts"),
       new Eventing()
     );
   }

@@ -8,7 +8,7 @@ post
 
 import { User } from "./user";
 
-const sutyi = new User({ id: 2 });
+const sutyi = User.build({ id: 2 });
 sutyi.fetch().then(() => {
   sutyi.set({ age: 44 });
   sutyi.save();
@@ -28,9 +28,7 @@ sutyi.subscribe("save", () => {
 
 import { Post } from "./post";
 
-const first = new Post({
-  id: 1,
-});
+const first = Post.build({ id: 1 });
 first.fetch().then(() => {
   first.set({ content: "other content" });
   first.save();

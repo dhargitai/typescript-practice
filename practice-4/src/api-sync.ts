@@ -1,7 +1,7 @@
 import axios from "axios";
 import { HasId } from "./interfaces";
 
-export class Sync<T extends HasId> {
+export class ApiSync<T extends HasId> {
   constructor(public rootUrl: string) {}
 
   save(data: T): Promise<void> {

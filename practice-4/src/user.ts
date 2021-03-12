@@ -1,7 +1,7 @@
 import { Attributes } from "./attributes";
 import { Eventing } from "./eventing";
 import { Model } from "./model";
-import { Sync } from "./sync";
+import { ApiSync } from "./api-sync";
 
 type UserProps = {
   id?: number;
@@ -10,10 +10,10 @@ type UserProps = {
 };
 
 export class User extends Model<UserProps> {
-  constructor(attributes: UserProps) {
-    super(
+  static build(attributes: UserProps) {
+    return new User(
       new Attributes<UserProps>(attributes),
-      new Sync<UserProps>("http://localhost:3000/users"),
+      new ApiSync<UserProps>("http://localhost:3000/users"),
       new Eventing()
     );
   }
